@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import { FiChevronsLeft, FiChevronRight } from 'react-icons/fi';
+import Toggle from 'react-toggle';
+import { Helmet } from 'react-helmet';
 
 import api from '../../services/api';
+import { useTheme } from '../../hooks/theme';
 
-import { Header, RepositoryInfo, Issues } from './style';
+import { Header, RepositoryInfo, Issues, Menu } from './style';
 
 import logoImg from '../../assets/logo.svg';
 
@@ -37,6 +40,8 @@ const Repository: React.FC = () => {
   const [repository, setRepository] = useState<Repository | null>(null);
   const [issues, setIssues] = useState<Issue[]>([]);
 
+  const { changeTheme, theme } = useTheme();
+
   const { params } = useRouteMatch<RepositoryParams>();
 
   useEffect(() => {
@@ -57,18 +62,34 @@ const Repository: React.FC = () => {
     loadData(); */
   }, [params.repository]);
 
+  function handleThemeChange(): void {
+    changeTheme();
+  }
+
   return (
     <>
+      <Helmet>
+        <style>
+          {theme === 'dark' && 'body { background-color: #2f3136; }'}
+        </style>
+      </Helmet>
       <Header>
         <img src={logoImg} alt="Github Explorer" />
+        <Toggle
+          icons={false}
+          defaultChecked={theme !== 'dark'}
+          onChange={handleThemeChange}
+        />
+      </Header>
+      <Menu>
         <Link to="/">
           <FiChevronsLeft size={16} />
           Voltar
         </Link>
-      </Header>
+      </Menu>
 
       {repository && (
-        <RepositoryInfo>
+        <RepositoryInfo theme={theme}>
           <header>
             <img
               src={repository.owner.avatar_url}
@@ -96,7 +117,7 @@ const Repository: React.FC = () => {
         </RepositoryInfo>
       )}
 
-      <Issues>
+      <Issues theme={theme}>
         {issues.map((issue) => (
           <a key={issue.id} href={issue.html_url}>
             <div>

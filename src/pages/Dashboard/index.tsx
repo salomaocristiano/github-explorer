@@ -1,12 +1,15 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import Toggle from 'react-toggle';
+import { Helmet } from 'react-helmet';
 
 import api from '../../services/api';
+import { useTheme } from '../../hooks/theme';
 
 import logoImg from '../../assets/logo.svg';
 
-import { Title, Form, Repositories, Error } from './style';
+import { Title, Form, Repositories, Error, Header } from './style';
 
 interface Repository {
   full_name: string;
@@ -31,6 +34,8 @@ const Dashboard: React.FC = () => {
 
     return [];
   });
+
+  const { changeTheme, theme } = useTheme();
 
   useEffect(() => {
     localStorage.setItem(
@@ -62,12 +67,32 @@ const Dashboard: React.FC = () => {
     }
   }
 
+  function handleThemeChange(): void {
+    changeTheme();
+  }
+
   return (
     <>
-      <img src={logoImg} alt="Github Explorer" />
-      <Title>Explore repositórios do Github</Title>
+      <Helmet>
+        <style>
+          {theme === 'dark' && 'body { background-color: #2f3136; }'}
+        </style>
+      </Helmet>
+      <Header>
+        <img src={logoImg} alt="Github Explorer" />
+        <Toggle
+          icons={false}
+          defaultChecked={theme !== 'dark'}
+          onChange={handleThemeChange}
+        />
+      </Header>
+      <Title theme={theme}>Explore repositórios do Github</Title>
 
-      <Form hasError={!!inputError} onSubmit={handleAddRepository}>
+      <Form
+        theme={theme}
+        hasError={!!inputError}
+        onSubmit={handleAddRepository}
+      >
         <input
           value={newRepo}
           onChange={(e) => setNewRepo(e.target.value)}
@@ -78,7 +103,7 @@ const Dashboard: React.FC = () => {
 
       {inputError && <Error>{inputError}</Error>}
 
-      <Repositories>
+      <Repositories theme={theme}>
         {repositories.map((repository) => (
           <Link
             key={repository.full_name}

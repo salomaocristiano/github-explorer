@@ -1,6 +1,16 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+interface ThemeProps {
+  theme: string;
+}
 
 export const Header = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const Menu = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -11,6 +21,7 @@ export const Header = styled.header`
     text-decoration: none;
     color: #a8a8b3;
     transition: color 0.2s;
+    margin-left: 45px;
 
     &:hover {
       color: #666;
@@ -22,7 +33,7 @@ export const Header = styled.header`
   }
 `;
 
-export const RepositoryInfo = styled.section`
+export const RepositoryInfo = styled.section<ThemeProps>`
   margin-top: 80px;
 
   header {
@@ -41,6 +52,12 @@ export const RepositoryInfo = styled.section`
       strong {
         font-size: 36px;
         color: #3d3d4d;
+
+        ${(props) =>
+          props.theme === 'dark' &&
+          css`
+            color: #fff;
+          `}
       }
 
       p {
@@ -65,6 +82,11 @@ export const RepositoryInfo = styled.section`
         display: block;
         font-size: 36px;
         color: #3d3d4d;
+        ${(props) =>
+          props.theme === 'dark' &&
+          css`
+            color: #fff;
+          `}
       }
 
       span {
@@ -76,7 +98,7 @@ export const RepositoryInfo = styled.section`
   }
 `;
 
-export const Issues = styled.div`
+export const Issues = styled.div<ThemeProps>`
   margin-top: 80px;
 
   a {
@@ -87,6 +109,12 @@ export const Issues = styled.div`
     display: block;
     text-decoration: none;
     transition: transform 0.2s;
+
+    ${(props) =>
+      props.theme === 'dark' &&
+      css`
+        background: #36393f;
+      `}
 
     display: flex;
     align-items: center;
@@ -106,6 +134,12 @@ export const Issues = styled.div`
       strong {
         font-size: 20px;
         color: #3d3d4d;
+
+        ${(props) =>
+          props.theme === 'dark' &&
+          css`
+            color: #fff;
+          `}
       }
 
       p {

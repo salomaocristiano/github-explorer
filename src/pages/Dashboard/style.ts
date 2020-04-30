@@ -3,14 +3,25 @@ import { shade } from 'polished';
 
 interface FormProps {
   hasError: boolean;
+  theme: string;
 }
 
-export const Title = styled.h1`
+interface ThemeProps {
+  theme: string;
+}
+
+export const Title = styled.h1<ThemeProps>`
   font-size: 48px;
   color: #3a3a3a;
   max-width: 450px;
   line-height: 56px;
   margin-top: 80px;
+
+  ${(props) =>
+    props.theme === 'dark' &&
+    css`
+      color: #fff;
+    `}
 `;
 
 export const Form = styled.form<FormProps>`
@@ -28,6 +39,14 @@ export const Form = styled.form<FormProps>`
     color: #3a3a3a;
     border: 2px solid #fff;
     border-right: 0;
+
+    ${(props) =>
+      props.theme === 'dark' &&
+      css`
+        background: #36393f;
+        border-color: #36393f;
+        color: #fff;
+      `}
 
     ${(props) =>
       props.hasError &&
@@ -50,13 +69,24 @@ export const Form = styled.form<FormProps>`
     font-weight: bold;
     transition: background-color 0.2s;
 
+    ${(props) =>
+      props.theme === 'dark' &&
+      css`
+        background: #7289da;
+      `}
+
     &:hover {
       background: ${shade(0.2, '#04d361')};
+      ${(props) =>
+        props.theme === 'dark' &&
+        css`
+          background: ${shade(0.2, '#7289da')};
+        `}
     }
   }
 `;
 
-export const Repositories = styled.div`
+export const Repositories = styled.div<ThemeProps>`
   margin-top: 80px;
   max-width: 700px;
 
@@ -71,6 +101,12 @@ export const Repositories = styled.div`
 
     display: flex;
     align-items: center;
+
+    ${(props) =>
+      props.theme === 'dark' &&
+      css`
+        background: #36393f;
+      `}
 
     &:hover {
       transform: translateX(10px);
@@ -94,6 +130,12 @@ export const Repositories = styled.div`
       strong {
         font-size: 20px;
         color: #3d3d4d;
+
+        ${(props) =>
+          props.theme === 'dark' &&
+          css`
+            color: #fff;
+          `}
       }
 
       p {
@@ -114,4 +156,10 @@ export const Error = styled.span`
   display: block;
   color: #c53030;
   margin-top: 8px;
+`;
+
+export const Header = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
